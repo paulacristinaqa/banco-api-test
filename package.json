@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./test/**/*.test.js --timeout=200000" 
+    "test": "mocha ./test/**/*.test.js --timeout=200000 --reporter mochawesome --require mochawesome"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +14,8 @@
     "chai": "^6.2.2",
     "mocha": "^11.7.5",
     "supertest": "^7.2.2"
+  },
+  "dependencies": {
+    "mochawesome": "^7.1.4"
   }
 }
