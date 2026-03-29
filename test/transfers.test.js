@@ -1,0 +1,145 @@
+const request = require('supertest');//condições para chamr o supertest
+const { expect } = require('chai');//condições para chamar o chai
+
+describe('Transferências', () => {
+  describe ('POST/Traneferencias', () => {
+    it('Teste 1-Deve retornar 201 quando for efetuada uma transferência maior ou igual a R$10,00', async () => {      
+        const respostaLogin = await request('http://localhost:3000')  //capturar o token
+                .post('/login')
+                .set('Content-Type','application/json')
+                .send({
+                  'username': 'julio.lima',
+                  'senha': '123456'
+                })
+                const token = respostaLogin.body.token
+        const resposta = await request('http://localhost:3000')
+                  .post('/transferencias')
+                  .set('Content-Type','application/json')    
+                  .set('Authorization',`Bearer ${token}`)                
+                  .send({
+                    'contaOrigem':1,
+                    'contaDestino': 3,
+                    'valor':10,
+                    'token':''
+                  })                  
+                expect(resposta.status).to.equal(201); 
+                console.log(resposta.status);
+                console.log(resposta.body);  
+    });
+    it('Teste 2-Deve retornar 422 quando for efetuada uma transferência menor ou igual a R$10,00', async () => {
+      const respostaLogin = await request('http://localhost:3000')  
+                .post('/login')
+                .set('Content-Type','application/json')
+                .send({
+                  'username': 'julio.lima',
+                  'senha': '123456'
+                })
+                const token = respostaLogin.body.token
+        const resposta = await request('http://localhost:3000')
+                  .post('/transferencias')
+                  .set('Content-Type','application/json')   
+                  .set('Authorization',`Bearer ${token}`)                   
+                  .send({
+                    'contaOrigem':1,
+                    'contaDestino': 3,
+                    'valor':9.99,
+                    'token':''
+                  })                  
+                expect(resposta.status).to.equal(422); 
+                console.log(resposta.status);
+                console.log(resposta.body);  
+    });
+    it('Teste 3-Deve retornar 404 quando for efetuada uma transferência com conta origem inválida', async () => {
+      const respostaLogin = await request('http://localhost:3000')  
+                .post('/login')
+                .set('Content-Type','application/json')
+                .send({
+                  'username':'julio.lima',
+                  'senha': '123456'
+                })
+                const token = respostaLogin.body.token
+        const resposta = await request('http://localhost:3000')
+                  .post('/transferencias')
+                  .set('Content-Type','application/json')    
+                  .set('Authorization',`Bearer ${token}`)                  
+                  .send({
+                    'contaOrigem':488,
+                    'contaDestino': 3,
+                    'valor':10,
+                    'token':''
+                  })                  
+                expect(resposta.status).to.equal(404); 
+                console.log(resposta.status);
+                console.log(resposta.body);  
+    });
+    it('Teste 3-Deve retornar 404 quando for efetuada uma transferência com conta destino inválida', async () => {
+      const respostaLogin = await request('http://localhost:3000') 
+                .post('/login')
+                .set('Content-Type','application/json')
+                .send({
+                  'username':'julio.lima',
+                  'senha': '123456'
+                })
+                const token = respostaLogin.body.token
+        const resposta = await request('http://localhost:3000')
+                  .post('/transferencias')
+                  .set('Content-Type','application/json')    
+                  .set('Authorization',`Bearer ${token}`)                  
+                  .send({
+                    'contaOrigem':1,
+                    'contaDestino': 500,
+                    'valor':10,
+                    'token':''
+                  })                  
+                expect(resposta.status).to.equal(404); 
+                console.log(resposta.status);
+                console.log(resposta.body);  
+    });
+    it('Teste 5-Deve retornar 403 quando for efetuada uma transferência com usuário sem permissão', async () => {
+      const respostaLogin = await request('http://localhost:3000') 
+                .post('/login')
+                .set('Content-Type','application/json')
+                .send({
+                  'username': 'junior.lima',
+                  'senha': '123456'
+                })
+                const token = respostaLogin.body.token
+        const resposta = await request('http://localhost:3000')
+                  .post('/transferencias')
+                  .set('Content-Type','application/json') 
+                  .set('Authorization',`Bearer ${token}`)                     
+                  .send({
+                    'contaOrigem':1,
+                    'contaDestino': 3,
+                    'valor':10,
+                    'token':''
+                  })                  
+                expect(resposta.status).to.equal(403); 
+                console.log(resposta.status);
+                console.log(resposta.body);  
+    });
+    // it('Teste 6-Deve retornar 500 quando for efetuada uma transferênciacom quando o servidor estiver com algum erro interno ', async () => {
+    //   const respostaLogin = await request('http://localhost:3000')  //capturar o token
+    //             .post('/login')
+    //             .set('Content-Type','application/json')
+    //             .send({
+    //               'username': 'julio.lima',
+    //               'senha': '123456'
+    //             })
+    //             const token = respostaLogin.body.token
+    //     const resposta = await request('http://localhost:3000')
+    //               .post('/transferencias')
+    //               .set('Content-Type','application/json')  
+    //               .set('Authorization',`Bearer ${token}`)                    
+    //               .send({
+    //                 'contaOrigem':1,
+    //                 'contaDestino': 3,
+    //                 'valor':10,
+    //                 'token':''
+    //               })                  
+    //             expect(resposta.status).to.equal(500); 
+    //             console.log(resposta.status);
+    //             console.log(resposta.body);  
+    // });
+  });
+});
