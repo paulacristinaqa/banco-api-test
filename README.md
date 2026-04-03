@@ -188,19 +188,18 @@ Example of a test validating account creation.
 
 Example request:
 
-    POST /accountslogin
+    POST /accounts
     Content-Type: application/json
 
     {
-  "username": "julio.lima",
-  "senha": "123456"
+       "username": "qa.test",
+        "senha": "123456"
     }
 
 Example response:
-Status code 200
 
     {
-    "token": "token jwt"
+      "token": "token jwt"      
     }
 
 Example automated test:
